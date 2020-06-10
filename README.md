@@ -4,7 +4,7 @@ This is a qml app snap.
 
 It uses mir-kiosk snap as a display server, using wayland EGL.
 
-# snapcraft interfaces
+# Snapd interfaces
 
 It uses qt as provided by test-qt-platform snap. 
 
