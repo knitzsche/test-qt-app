@@ -1,0 +1,88 @@
+name: test-qt-app
+version: "1"
+summary: A qt qml app snap
+description: |
+  This snap provides a hello world qml qt app that runs on
+  mir-kiosk using wayland and EGL
+confinement: strict
+base: core18
+grade: stable
+
+plugs:
+  network:
+  opengl:
+  wayland:
+  qt-platform:
+    interface: content
+    content: qt-platform
+    target: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET
+  fonts:
+    interface: content
+    content: fonts
+    target: $SNAP/etc/fonts
+  fonts-usr-share:
+    interface: content
+    content: fonts-usr-share
+    target: $SNAP/usr/share/fonts
+  qml:
+    interface: content
+    content: qml
+    target: $SNAP/qmlscene
+  glvnd:
+    interface: content
+    content: glvnd
+    target: $SNAP/usr/share/glvnd
+
+apps:
+  daemon:
+    command: daemon.sh
+    daemon: simple
+  echo: 
+    command: echo.sh
+
+environment:
+  # Qt Platform to Wayland
+  QT_QPA_PLATFORM: wayland
+  QTCHOOSER_NO_GLOBAL_DIR: 1
+  QT_SELECT: snappy-qt5
+  # enable the following to log qt module import debugging
+  #QML_IMPORT_TRACE: 1
+  # find font config (as provided through content share)
+  FONTCONFIG_FILE: $SNAP/etc/fonts/fonts.conf
+  FONTCONFIG_PATH: $SNAP/etc/fonts
+  LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/:$SNAP/lib:$SNAP/usr/lib:$SNAP/lib/arm-linux-gnueabihf
+  # find mesa impl of gl from content provdier (https://www.mesa3d.org/envvars.html)
+  LIBGL_DRIVERS_PATH: ${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri
+  # find EGL from content provider (https://www.mesa3d.org/egl.html
+  __EGL_VENDOR_LIBRARY_DIRS: $SNAP/etc/glvnd/egl_vendor.d:$SNAP/usr/share/glvnd/egl_vendor.d
+
+layout:
+  /etc/glvnd:
+    bind: $SNAP/etc/glvnd
+  /usr/share/X11/xkb:
+    bind: $SNAP/usr/share/X11/xkb
+  /usr/share/fonts:
+    bind: $SNAP/usr/share/fonts
+  /usr/local/share/fonts:
+    bind: $SNAP/usr/local/share/fonts
+  /usr/share/glvnd:
+    bind: $SNAP/usr/share/glvnd
+  /usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/qt5:
+    bind: $SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/qt5
+  /usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri:
+    bind: $SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri
+
+parts:
+
+  app:
+    plugin: dump
+    source: app
+
+  mir-kiosk-snap-launch:
+    plugin: dump
+    source: https://github.com/MirServer/mir-kiosk-snap-launch.git
+    override-build:  $SNAPCRAFT_PART_BUILD/build-with-plugs.sh opengl wayland
+
+  launchers:
+    source: launchers
+    plugin: dump
