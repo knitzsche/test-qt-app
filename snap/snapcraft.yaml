@@ -1,5 +1,5 @@
 name: test-qt-app
-version: "1"
+version: "2"
 summary: A qt qml app snap
 description: |
   This snap provides a hello world qml qt app that runs on
@@ -16,11 +16,11 @@ plugs:
     interface: content
     content: qt-platform
     target: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET
-  fonts:
+  fonts-etc:
     interface: content
     content: fonts
-    target: $SNAP/etc/fonts
-  fonts-usr-share:
+    target: $SNAP_DATA/etc/fonts
+  fonts:
     interface: content
     content: fonts-usr-share
     target: $SNAP/usr/share/fonts
@@ -41,15 +41,10 @@ apps:
     command: echo.sh
 
 environment:
-  # Qt Platform to Wayland
   QT_QPA_PLATFORM: wayland
-  QTCHOOSER_NO_GLOBAL_DIR: 1
-  QT_SELECT: snappy-qt5
-  # enable the following to log qt module import debugging
-  #QML_IMPORT_TRACE: 1
   # find font config (as provided through content share)
-  FONTCONFIG_FILE: $SNAP/etc/fonts/fonts.conf
-  FONTCONFIG_PATH: $SNAP/etc/fonts
+  FONTCONFIG_FILE: $SNAP_DATA/etc/fonts/fonts.conf
+  FONTCONFIG_PATH: $SNAP_DATA/etc/fonts
   LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/:$SNAP/lib:$SNAP/usr/lib:$SNAP/lib/arm-linux-gnueabihf
   # find mesa impl of gl from content provdier (https://www.mesa3d.org/envvars.html)
   LIBGL_DRIVERS_PATH: ${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri
@@ -73,7 +68,6 @@ layout:
     bind: $SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri
 
 parts:
-
   app:
     plugin: dump
     source: app
