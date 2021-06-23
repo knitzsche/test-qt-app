@@ -5,7 +5,7 @@ description: |
   This snap provides a hello world qml qt app that runs on
   mir-kiosk using wayland and EGL
 confinement: strict
-base: core18
+base: core20
 grade: stable
 
 plugs:
@@ -35,9 +35,13 @@ plugs:
 
 apps:
   daemon:
-    command: daemon.sh
     daemon: simple
-  echo: 
+    restart-condition: always
+    command-chain:
+      - bin/run-daemon
+      - bin/wayland-launch
+    command: daemon.sh
+  echo:
     command: echo.sh
 
 environment:
