@@ -1,5 +1,5 @@
 name: test-qt-app
-version: "2"
+version: "3"
 summary: A qt qml app snap
 description: |
   This snap provides a hello world qml qt app that runs on
@@ -12,6 +12,10 @@ plugs:
   network:
   opengl:
   wayland:
+  graphics-core20:
+    interface: content
+    target: $SNAP/graphics
+    default-provider: mesa-core20
   qt-platform:
     interface: content
     content: qt-platform
