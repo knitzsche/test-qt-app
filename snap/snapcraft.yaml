@@ -1,9 +1,11 @@
-name: test-qt-app
-version: "3"
+name: demo-release
+version: "1"
 summary: A qt qml app snap
 description: |
-  This snap provides a hello world qml qt app that runs on
-  mir-kiosk using wayland and EGL
+  This snap provides a Qt/qml app that displays a different gif with each revision. 
+  The purpose is to visually demonstrate release of a new revision to channel
+  and the subsequent change on the running client. The snap depends on test-qt-platform
+  snap to provide Qt. It is intented to be used with ubuntu-frame snap on Ubuntu Core. 
 confinement: strict
 base: core20
 grade: stable
@@ -22,7 +24,7 @@ plugs:
     target: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET
   fonts-etc:
     interface: content
-    content: fonts
+    content: fonts-etc
     target: $SNAP_DATA/etc/fonts
   fonts:
     interface: content
