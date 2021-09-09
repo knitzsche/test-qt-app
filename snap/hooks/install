@@ -1,4 +1,4 @@
 #!/bin/sh
 
-snapctl stop ${SNAP_NAME}.daemon --disable
+#snapctl stop ${SNAP_NAME}.daemon --disable
 
