@@ -2,7 +2,7 @@ import QtQuick 2.0
 
 Rectangle {
     width: animation.width; height: animation.height + 8
-    AnimatedImage { id: animation; source: "2.gif" }
+    AnimatedImage { id: animation; source: "1.gif" }
 
     Rectangle {
         property int frames: animation.frameCount
